@@ -161,3 +161,10 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+# java
+*.class
+target
+.classpath
+.settings
+.project

@@ -1,7 +1,7 @@
 /**
  * $Id: DefaultRPCServer.java 887 2012-12-29 05:35:06Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc;
+package com.taobao.simplerpc;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

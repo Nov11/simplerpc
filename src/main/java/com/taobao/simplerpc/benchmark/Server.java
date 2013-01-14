@@ -1,15 +1,15 @@
 /**
  * $Id: Server.java 863 2012-12-24 07:08:25Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc.benchmark;
+package com.taobao.simplerpc.benchmark;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.taobao.metaq.research.rpc.DefaultRPCServer;
-import com.taobao.metaq.research.rpc.RPCProcessor;
-import com.taobao.metaq.research.rpc.RPCServer;
+import com.taobao.simplerpc.DefaultRPCServer;
+import com.taobao.simplerpc.RPCProcessor;
+import com.taobao.simplerpc.RPCServer;
 
 
 /**

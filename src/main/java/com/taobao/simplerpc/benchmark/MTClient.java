@@ -1,7 +1,7 @@
 /**
  * $Id: MTClient.java 866 2012-12-24 07:26:10Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc.benchmark;
+package com.taobao.simplerpc.benchmark;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.taobao.metaq.research.rpc.DefaultRPCClient;
-import com.taobao.metaq.research.rpc.RPCClient;
+import com.taobao.simplerpc.DefaultRPCClient;
+import com.taobao.simplerpc.RPCClient;
 
 
 /**

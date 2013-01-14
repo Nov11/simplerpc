@@ -1,7 +1,7 @@
 /**
  * $Id: Connection.java 912 2013-01-04 03:13:49Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc;
+package com.taobao.simplerpc;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import com.taobao.metaq.research.rpc.LinkedByteBufferList.ByteBufferNode;
+import com.taobao.simplerpc.LinkedByteBufferList.ByteBufferNode;
 
 
 /**

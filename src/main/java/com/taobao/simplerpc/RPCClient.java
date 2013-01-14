@@ -1,7 +1,7 @@
 /**
  * $Id: RPCClient.java 864 2012-12-24 07:21:58Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc;
+package com.taobao.simplerpc;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;

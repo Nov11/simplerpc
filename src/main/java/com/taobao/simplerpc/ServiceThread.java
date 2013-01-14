@@ -1,7 +1,7 @@
 /**
  * $Id: ServiceThread.java 889 2012-12-29 05:49:42Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc;
+package com.taobao.simplerpc;
 
 /**
  * 后台服务线程基类

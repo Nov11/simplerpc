@@ -1,13 +1,13 @@
 /**
  * $Id: Client.java 864 2012-12-24 07:21:58Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc.benchmark;
+package com.taobao.simplerpc.benchmark;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-import com.taobao.metaq.research.rpc.DefaultRPCClient;
-import com.taobao.metaq.research.rpc.RPCClient;
+import com.taobao.simplerpc.DefaultRPCClient;
+import com.taobao.simplerpc.RPCClient;
 
 
 /**

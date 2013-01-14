@@ -1,7 +1,7 @@
 /**
  * $Id: RPCServer.java 839 2012-12-22 04:55:58Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc;
+package com.taobao.simplerpc;
 
 /**
  * Ò»¸ö¼òµ¥RPC Server

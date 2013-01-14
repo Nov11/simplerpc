@@ -1,7 +1,7 @@
 /**
  * $Id: LinkedByteBufferList.java 877 2012-12-24 09:35:06Z shijia.wxr $
  */
-package com.taobao.metaq.research.rpc;
+package com.taobao.simplerpc;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.LinkedBlockingDeque;

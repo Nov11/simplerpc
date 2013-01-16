@@ -1,6 +1,6 @@
 ## OVERVIEW
 
-It's a store for MQ.
+It's a simple rpc for java.
 
 ## LICENSE
 

@@ -17,8 +17,8 @@ import com.taobao.simplerpc.LinkedByteBufferList.ByteBufferNode;
 
 
 /**
- * “ª∏ˆSocket¡¨Ω”∂‘œÛ£¨Client”ÎServerÕ®”√
- * 
+ * ‰∏Ä‰∏™SocketËøûÊé•ÂØπË±°ÔºåClient‰∏éServerÈÄöÁî®
+ *
  * @author vintage.wang@gmail.com shijia.wxr@taobao.com
  */
 public class Connection {
@@ -59,21 +59,17 @@ public class Connection {
                             node.getByteBufferRead().limit(node.getWriteOffset().get());
                             int writeSize = this.socketChannel.write(node.getByteBufferRead());
                             if (writeSize > 0) {
-                            }
-                            else if (writeSize == 0) {
+                            } else if (writeSize == 0) {
                                 if (++writeSizeZeroTimes >= 3) {
                                     break;
                                 }
+                            } else {
                             }
-                            else {
-                            }
-                        }
-                        else {
+                        } else {
                             break;
                         }
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println(this.getServiceName() + " service has exception.");
                     System.out.println(e.getMessage());
                     break;
@@ -88,8 +84,7 @@ public class Connection {
             try {
                 this.selector.close();
                 this.socketChannel.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -132,8 +127,7 @@ public class Connection {
                         System.out.println("processReadEvent error");
                         break;
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println(this.getServiceName() + " service has exception.");
                     System.out.println(e.getMessage());
                     break;
@@ -148,8 +142,7 @@ public class Connection {
             try {
                 this.selector.close();
                 this.socketChannel.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -165,7 +158,7 @@ public class Connection {
 
 
     public Connection(final SocketChannel socketChannel, final RPCProcessor rpcServerProcessor,
-            final ThreadPoolExecutor executor) {
+                      final ThreadPoolExecutor executor) {
         this.socketChannel = socketChannel;
         this.rpcServerProcessor = rpcServerProcessor;
         this.executor = executor;
@@ -178,8 +171,7 @@ public class Connection {
             this.socketChannel.socket().setSendBufferSize(1024 * 64);
             this.writeSocketService = new WriteSocketService(this.socketChannel);
             this.readSocketService = new ReadSocketService(this.socketChannel);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -199,9 +191,9 @@ public class Connection {
 
 
     /**
-     * ¥¶¿Ìselect∂¡ ¬º˛
-     * 
-     * @return ∑µªÿ¥¶¿ÌΩ·π˚
+     * Â§ÑÁêÜselectËØª‰∫ã‰ª∂
+     *
+     * @return ËøîÂõûÂ§ÑÁêÜÁªìÊûú
      */
     public boolean processReadEvent() {
         int readSizeZeroTimes = 0;
@@ -211,19 +203,16 @@ public class Connection {
                 if (readSize > 0) {
                     readSizeZeroTimes = 0;
                     this.dispatchReadRequest();
-                }
-                else if (readSize == 0) {
+                } else if (readSize == 0) {
                     if (++readSizeZeroTimes >= 3) {
                         break;
                     }
-                }
-                else {
+                } else {
                     // TODO ERROR
                     System.out.println("read socket < 0");
                     return false;
                 }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -235,16 +224,16 @@ public class Connection {
 
     private void dispatchReadRequest() {
         int writePostion = this.byteBufferRead.position();
-        // ’Î∂‘œﬂ≥Ã≥ÿ”≈ªØ
+        // ÈíàÂØπÁ∫øÁ®ãÊ±†‰ºòÂåñ
         final List<ByteBuffer> requestList = new LinkedList<ByteBuffer>();
 
         while (true) {
             int diff = this.byteBufferRead.position() - this.dispatchPostion;
             if (diff >= 8) {
-                // msgSize≤ª∞¸∫¨œ˚œ¢reqId
+                // msgSize‰∏çÂåÖÂê´Ê∂àÊÅØreqId
                 int msgSize = this.byteBufferRead.getInt(this.dispatchPostion);
                 final Integer reqId = this.byteBufferRead.getInt(this.dispatchPostion + 4);
-                // ø…“‘¥’πª“ª∏ˆ«Î«Û
+                // ÂèØ‰ª•ÂáëÂ§ü‰∏Ä‰∏™ËØ∑Ê±Ç
                 if (diff >= (8 + msgSize)) {
                     this.byteBufferRead.position(0);
                     final ByteBuffer request = this.byteBufferRead.slice();
@@ -269,21 +258,17 @@ public class Connection {
                                         if (response != null) {
                                             Connection.this.linkeByteBufferList.putData(reqId, response);
                                         }
-                                    }
-                                    catch (Throwable e) {
+                                    } catch (Throwable e) {
                                         e.printStackTrace();
                                     }
                                 }
                             });
-                        }
-                        catch (RejectedExecutionException e) {
+                        } catch (RejectedExecutionException e) {
                             requestList.add(request);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
-                    else {
+                    } else {
                         byte[] response = Connection.this.rpcServerProcessor.process(reqId, request);
                         if (response != null) {
                             Connection.this.linkeByteBufferList.putData(reqId, response);
@@ -292,25 +277,24 @@ public class Connection {
 
                     continue;
                 }
-                // Œﬁ∑®¥’πª“ª∏ˆ«Î«Û
+                // Êó†Ê≥ïÂáëÂ§ü‰∏Ä‰∏™ËØ∑Ê±Ç
                 else {
-                    // ByteBuffer¬˙¡À£¨∑÷≈‰–¬µƒƒ⁄¥Ê
+                    // ByteBufferÊª°‰∫ÜÔºåÂàÜÈÖçÊñ∞ÁöÑÂÜÖÂ≠ò
                     if (!this.byteBufferRead.hasRemaining()) {
                         this.reallocateByteBuffer();
                     }
 
                     break;
                 }
-            }
-            else if (!this.byteBufferRead.hasRemaining()) {
+            } else if (!this.byteBufferRead.hasRemaining()) {
                 this.reallocateByteBuffer();
             }
 
             break;
         }
 
-        // “ª∏ˆœﬂ≥Ãƒ⁄‘À––∂‡∏ˆ»ŒŒÒ
-        for (boolean retry = true; retry;) {
+        // ‰∏Ä‰∏™Á∫øÁ®ãÂÜÖËøêË°åÂ§ö‰∏™‰ªªÂä°
+        for (boolean retry = true; retry; ) {
             try {
                 if (!requestList.isEmpty()) {
                     this.executor.execute(new Runnable() {
@@ -322,8 +306,7 @@ public class Connection {
                                     if (response != null) {
                                         Connection.this.linkeByteBufferList.putData(reqId, response);
                                     }
-                                }
-                                catch (Throwable e) {
+                                } catch (Throwable e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -332,12 +315,10 @@ public class Connection {
                 }
 
                 retry = false;
-            }
-            catch (RejectedExecutionException e) {
+            } catch (RejectedExecutionException e) {
                 try {
                     Thread.sleep(1);
-                }
-                catch (InterruptedException e1) {
+                } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
             }
@@ -345,13 +326,13 @@ public class Connection {
     }
 
 
-     private void reallocateByteBuffer() {
-     ByteBuffer bb = ByteBuffer.allocate(ReadMaxBufferSize);
-     int remain = this.byteBufferRead.limit() - this.dispatchPostion;
-     bb.put(this.byteBufferRead.array(), this.dispatchPostion, remain);
-     this.dispatchPostion = 0;
-     this.byteBufferRead = bb;
-     }
+    private void reallocateByteBuffer() {
+        ByteBuffer bb = ByteBuffer.allocate(ReadMaxBufferSize);
+        int remain = this.byteBufferRead.limit() - this.dispatchPostion;
+        bb.put(this.byteBufferRead.array(), this.dispatchPostion, remain);
+        this.dispatchPostion = 0;
+        this.byteBufferRead = bb;
+    }
 
 //    private void reallocateByteBuffer() {
 //        int remain = this.byteBufferRead.limit() - this.dispatchPostion;
@@ -388,8 +369,7 @@ public class Connection {
         if (this.socketChannel != null) {
             try {
                 this.socketChannel.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

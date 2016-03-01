@@ -12,10 +12,28 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.taobao.simplerpc.DefaultRPCClient;
 import com.taobao.simplerpc.RPCClient;
 
+/**
+ * Copyright 2016-3-1 vintage.wang@gmail.com shijia.wxr@taobao.com
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * 529079634@qq.com made comments on the source code
+ */
 
 /**
  * 多线程客户端，做性能压测
- * 
+ *
  * @author vintage.wang@gmail.com shijia.wxr@taobao.com
  */
 public class MTClient {
@@ -61,17 +79,15 @@ public class MTClient {
         for (int i = 0; i < threadCnt; i++) {
             executorSend.execute(new Runnable() {
                 public void run() {
-                    while (true) {
+                    while (true) {//这里的true是作者有意的 多线程调call这个函数发rpc 返回值null和非null各自统计一下
                         try {
                             ByteBuffer repdata = rpcClient.call(message);
                             if (repdata != null) {
                                 callTimesOK.incrementAndGet();
-                            }
-                            else {
+                            } else {
                                 callTimesFailed.incrementAndGet();
                             }
-                        }
-                        catch (InterruptedException e) {
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
@@ -79,11 +95,11 @@ public class MTClient {
             });
         }
 
+        //每隔3s，对成功的请求算QPS数，顺便打印失败的请求数。
         // stats thread
         Thread statsThread = new Thread(new Runnable() {
             long lastTimestamp = 0;
             long lastCallTimesOK = 0;
-
 
             public void run() {
                 while (true) {
@@ -92,15 +108,14 @@ public class MTClient {
                     double interval = (timestamp - this.lastTimestamp) / 1000;
 
                     System.out.printf("call OK QPS: %.2f Failed Times: %d\n",
-                        (thisCallTimesOK - this.lastCallTimesOK) / interval, callTimesFailed.get());
+                            (thisCallTimesOK - this.lastCallTimesOK) / interval, callTimesFailed.get());
 
                     this.lastTimestamp = timestamp;
                     this.lastCallTimesOK = thisCallTimesOK;
 
                     try {
                         Thread.sleep(3000);
-                    }
-                    catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
